@@ -135,7 +135,10 @@
 			};
 
 			legend.addTo(map);
-			var searchControl = L.esri.Geocoding.Controls.geosearch(useMapBounds=20).addTo(map);
+			var searchControl = L.esri.Geocoding.Controls.geosearch({
+				zoomToResult: true,
+				useMapBounds: false,
+			}).addTo(map);
 
 			var results = L.layerGroup().addTo(map);
 
