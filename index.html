@@ -28,7 +28,7 @@
 	
 
 	
-	<script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
+	<script src="http://cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
     <style type="text/css">
 
 	#map {
@@ -114,36 +114,11 @@
 	
 			map._initPathRoot();
 			console.log(L.esri);
-			var searchControl = L.esri.Geocoding.Controls.geosearch(useMapBounds=9).addTo(map);
-
-			var results = L.layerGroup().addTo(map);
-
-			searchControl.on('results', function(data){
-				results.clearLayers();
-				for (var i = data.results.length - 1; i >= 0; i--) {
-					results.addLayer(L.marker(data.results[i].latlng),{
-						icon:L.icon({
-						iconUrl: 'https://cdn.jsdelivr.net/leaflet/latest/images/marker-icon.png',
-						iconSize: [27, 31],
-						iconAnchor: [13.5, 17.5],
-						popupAnchor: [0, -11],
-					})
-					});
-				}
-			});
-			$(document).ready(function(){
-				
-				mapping(map,returnoffense(),returncrime(),returntime(),returnresult());
-				newNavi();
-			});
-			function findmap(){
-				return map;
-			}
 			var legend = L.control({position: 'topleft'});
 
 			legend.onAdd = function (map) {
 			
-				console.log("dd");
+				
 
 				var div = L.DomUtil.create('div', 'info legend'),
 					grades = [0, 3, 20],
@@ -160,6 +135,31 @@
 			};
 
 			legend.addTo(map);
+			var searchControl = L.esri.Geocoding.Controls.geosearch(useMapBounds=20).addTo(map);
+
+			var results = L.layerGroup().addTo(map);
+
+			searchControl.on('results', function(data){
+				results.clearLayers();
+				for (var i = data.results.length - 1; i >= 0; i--) {
+					results.addLayer(L.marker(data.results[i].latlng),{
+						icon:L.icon({
+						iconUrl: 'https://cdn.jsdelivr.net/leaflet/latest/images/marker-icon.png',
+						iconSize: [27, 31],
+						iconAnchor: [13.5, 17.5],
+						popupAnchor: [0, -11],
+					})
+					});
+				}
+			});
+			
+			
+			newNavi();
+			
+			function findmap(){
+				return map;
+			}
+			
 			
 			
 			</script>

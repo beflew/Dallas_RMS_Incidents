@@ -4,6 +4,9 @@
 	offe=["All"];
 	time=["All"];
 	resu=["All"];
+	$(document).ready(function(){
+		mapping(map,returnoffense(),returncrime(),returntime(),returnresult());
+	});
 	
 	
     $.fn.ssdVerticalNavigation = function(options) {
@@ -154,9 +157,9 @@
 						}
 					}
 					if (in_array(thisA.attr("class"),["result","time","offenseCrime","offense"])){
-						console.log(offe);
-						console.log(inci);
-						mapping(findmap(),offe,inci,time,resu);
+						console.log("change");
+						mapping(map,offe,inci,time,resu);
+						
 					}
 					
                     _leftNavigationClick(thisParentUl, thisLi, event);

@@ -1,4 +1,5 @@
 function mapping(map,offense,incidents,time,result) {
+	
 
 	var svg = d3.select("#map").select("svg");
 	
@@ -17,23 +18,31 @@ function mapping(map,offense,incidents,time,result) {
     });
 	g.call(tip);
 		
-	map.on("viewreset", reset);
+	
 	map.on("moveend", reset);
 	reset();
 	function reset() {
+		
+		console.log(offense);
+		console.log(incidents);
+		console.log(time);
+		console.log(result);
+		
 		g.selectAll(".road")
 		.remove();
 		var file="data/streetlevelbigroads.json";
-	console.log(map.getZoom());
-	if (map.getZoom()>=15){
-		file="data/streetlevel.json";
+		if (map.getZoom()>=15){
+			file="data/streetlevel.json";
 		
-	}
+		}
 		d3.json(file, function(error, collectionA) {
 		if (error) throw error;
 		bounds=map.getBounds();
 		
 		collection=[]
+		
+
+		
 		
 		collectionA.forEach(function (d){
 			road=[];
@@ -58,7 +67,7 @@ function mapping(map,offense,incidents,time,result) {
 				collection.push(road);
 			}
 		});
-	
+	console.log(collection.length);
 	var toLine = d3.svg.line()
 		.interpolate("linear")
 		.x(function(d) {
