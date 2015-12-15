@@ -105,7 +105,9 @@
 							thisLi.removeClass(settings.classActive);
 						}
 					}
-					mapping(offe,inci,time,resu);
+					if (in_array(thisA.attr("class"),["result","time","offenseCrime","offense"])){
+						mapping(offe,inci,time,resu);
+					}
                     _leftNavigationClick(thisParentUl, thisLi, event);
 
                 } catch (errorMessage) {
