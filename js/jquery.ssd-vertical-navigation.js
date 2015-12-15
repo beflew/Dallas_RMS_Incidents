@@ -67,6 +67,7 @@
 					
 					if (thisA.attr("class")=="offense"){
 						if (thisA.text()=="All"){
+								
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -91,6 +92,7 @@
 					
 					if (thisA.attr("class")=="offenseCrime"){
 						if (thisA.text()=="All"){
+								inci=[]
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -114,6 +116,7 @@
 					
 					if (thisA.attr("class")=="time"){
 						if (thisA.text()=="All"){
+								time=[];
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -136,6 +139,7 @@
 					
 					if (thisA.attr("class")=="result"){
 						if (thisA.text()=="All"){
+								resu=[];
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
