@@ -1,52 +1,63 @@
-function mapping(offense,incidents,time,result) {
-	document.getElementById('mapcontain').innerHTML="<div id='map'></div>";
-	var map = new L.Map("map", {center: [32.740, -96.889], zoom: 12})
-		.addLayer(new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
-	
-	map._initPathRoot();
-	
+function mapping(map,offense,incidents,time,result) {
 
-
-	var svg = d3.select("#map").select("svg"),
-	g = svg.append("g");
+	var svg = d3.select("#map").select("svg");
+	
+	var g = svg.append("g")
+				.attr("id","great");
+	
 
 	proj4.defs("EPSG:2276","+proj=lcc +lat_1=33.96666666666667 +lat_2=32.13333333333333 +lat_0=31.66666666666667 +lon_0=-98.5 +x_0=600000 +y_0=2000000.0001016 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs");
 	proj4.defs("EPSG:4326","+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
 	
-	console.log(proj4("EPSG:2276","EPSG:4326",[2514421.203, 7018365.051]));
-	console.log(offense);
-	console.log(time);
-	console.log(incidents);
-	console.log(result);
-	var data=[]
-	
-	
-	d3.json("data/streetlevelbigroads.json", function(error, collection) {
+	var tip = d3.tip()
+				.attr('class', 'd3-tip')
+				.offset([0, 0])
+				.html(function(d) {
+						return "<p style='line-height: 30%'><strong>"+d.name+"</strong></p>";
+    });
+	g.call(tip);
+		
+	map.on("viewreset", reset);
+	map.on("moveend", reset);
+	reset();
+	function reset() {
+		g.selectAll(".road")
+		.remove();
+		var file="data/streetlevelbigroads.json";
+	console.log(map.getZoom());
+	if (map.getZoom()>=15){
+		file="data/streetlevel.json";
+		
+	}
+		d3.json(file, function(error, collectionA) {
 		if (error) throw error;
-		data=$.extend(collection,data);
-		collection.forEach(function (d){
+		bounds=map.getBounds();
+		
+		collection=[]
+		
+		collectionA.forEach(function (d){
+			road=[];
+			road.type=d.type;
+			road.name=d.name;
+			road.path=[];
 			d.path.forEach(function (t){
 				count=0;
-				t.incidents.forEach(function (incident){
-					if ((in_array(incident["offense"],offense))&&(in_array(incident["time"],time))&&(in_array(incident["type"],incidents))&&(in_array(incident["result"],result))){
-						count=count+1;
-					}
-					
-				});
-				t.count=count;
+				if (anyin(t.points,bounds)){
+					t.incidents.forEach(function (incident){
+						if (((in_array(incident["offense"],offense))||(in_array("All",offense)))&&(in_array(incident["time"],time)||in_array("All",time))&&(in_array(incident["type"],incidents)||in_array("All",incidents))&&(in_array(incident["result"],result)||in_array("All",result))){
+							count=count+1;
+						}
+					});
+					t.count=count;
+					road.path.push(t);
+				}
+				
+				
 			});
+			if (road.path.length>0){
+				collection.push(road);
+			}
 		});
-		
-	
-	var transform = d3.geo.transform({
-		point: projectPoint
-	});
-	var d3path = d3.geo.path().projection(transform);
-
-	function projectPoint(lat, lon) {
-		var point = map.latLngToLayerPoint(new L.LatLng(lat, lon));
-		this.stream.point(point.x, point.y);
-	}
 	
 	var toLine = d3.svg.line()
 		.interpolate("linear")
@@ -63,20 +74,19 @@ function mapping(offense,incidents,time,result) {
 		return map.latLngToLayerPoint(new L.LatLng(y, x))
 	}
 	draw();
-	map.on("viewreset", reset);
-	reset();
-	function reset() {
-		for (var i=0;i<collection.length;i++){
-			var ss=d3.selectAll(".path"+i)
-					.attr("d",function (d){return toLine(d.points)});
-					
-		}
-		
+	for (var i=0;i<collection.length;i++){
+		var ss=d3.selectAll(".path"+i)
+				.attr("d",function (d){return toLine(d.points)});
+				
 	}
-	
-
+		
 	function draw(){
 	mark=0
+	
+	var wid=2;
+	if (map.getZoom()>15){
+		wid=map.getZoom()-13;
+	}
 	var features = g.selectAll(".road")
 		.data(collection)
 		.enter()
@@ -94,24 +104,27 @@ function mapping(offense,incidents,time,result) {
 		})
 		.on("mouseover",function (d){
 			if (d.name!=""){
-				
+				tip.show(d);
 				var reg=new RegExp(" ","g");
 				var nameclass="."+d.name.replace(reg,"_");
 				d3.selectAll(nameclass)
-					.style("stroke-width",5)
+					.style("stroke-width",wid+5)
 			}
 		})
 		.on("mouseout",function (d){
 			if (d.name!=""){
+				tip.hide(d);
 				var reg=new RegExp(" ","g");
 				var nameclass="."+d.name.replace(reg,"_");
 				d3.selectAll(nameclass)
-					.style("stroke-width",2)
+					.style("stroke-width",wid)
 			}
 		});
 
 	paths=[]
 	path=[]
+	
+	
 	for (var i=0;i<collection.length;i++){
 		var temp=g.select("#road"+i);
 		
@@ -127,30 +140,47 @@ function mapping(offense,incidents,time,result) {
 			.style("fill","none")
 			.style("stroke",function (d){
 				if (d.count>20) {
-					return "red";}
+					return "#c10000";}
 				if (d.count>3){
-					return "yellow";}
-				return "green";
+					return "#e8e443";}
+				return "#92d69a";
 			})
-			.style("stroke-width",2);
+			.style("stroke-width",wid);
 		for (var j=0;j<tt[0].length;j++){
 			path.push(tt[0][j])
 		}
 	}
 	paths.push(path);
+	}
+	});
+	}
+	
+
 	
 	}
 	
 	
-	});
-}
+	
 
 function in_array(stringToSearch, arrayToSearch) {
- for (s = 0; s < arrayToSearch.length; s++) {
-  thisEntry = arrayToSearch[s].toString();
-  if (thisEntry == stringToSearch) {
-   return true;
-  }
- }
- return false;
+	for (s = 0; s < arrayToSearch.length; s++) {
+		thisEntry = arrayToSearch[s].toString();
+		if (thisEntry == stringToSearch) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function anyin(points,bounds){
+	var st=false;
+	points.forEach(function (d){
+		
+		po=new L.LatLng(d.lat,d.lon);
+		if (bounds.contains(po)){
+			st=true;
+		}
+	});
+	return st;
+	
 }

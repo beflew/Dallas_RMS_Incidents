@@ -1,9 +1,9 @@
 ;(function($) {
 
-	inci=returncrime();
-	offe=returnoffense();
-	time=returntime();
-	resu=returnresult();
+	inci=["All"];
+	offe=["All"];
+	time=["All"];
+	resu=["All"];
 	
 	
     $.fn.ssdVerticalNavigation = function(options) {
@@ -63,51 +63,102 @@
                         thisParentUl = thisLi.parent('ul');
 					
 					if (thisA.attr("class")=="offense"){
-						console.log(thisA.attr("class"));
-						if (in_array(thisA.text(),offe)){
-							thisLi.toggleClass(settings.classActive);
-							offe.splice(offe.indexOf(thisA.text()),1)	
-						} else {
+						if (thisA.text()=="All"){
+								thisLi.siblings()
+									.removeClass(settings.classActive);
+							}
+						if (thisA.text()!="All"){
+							if (in_array("All",offe)){
+								offe.splice(offe.indexOf("All"),1);
+								$("#offenseAll")
+									.removeClass(settings.classActive);
+							}
+						}
+						
+						if (!in_array(thisA.text(),offe)){
 							offe.push(thisA.text());
+							
+							thisLi.toggleClass(settings.classActive);
+								
+						} else {
+							offe.splice(offe.indexOf(thisA.text()),1);
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					
 					if (thisA.attr("class")=="offenseCrime"){
+						if (thisA.text()=="All"){
+								thisLi.siblings()
+									.removeClass(settings.classActive);
+							}
+						if (thisA.text()!="All"){
+							if (in_array("All",inci)){
+								inci.splice(inci.indexOf("All"),1);
+								$("#offenseCrimeAll")
+									.removeClass(settings.classActive);
+							}
+						}
 						
-						if (in_array(thisA.text(),inci)){
+						if (!in_array(thisA.text(),inci)){
 							thisLi.toggleClass(settings.classActive);
-							inci.splice(inci.indexOf(thisA.text()),1);
-						} else {
 							inci.push(thisA.text());
+							
+						} else {
+							inci.splice(inci.indexOf(thisA.text()),1);
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					
 					if (thisA.attr("class")=="time"){
+						if (thisA.text()=="All"){
+								thisLi.siblings()
+									.removeClass(settings.classActive);
+							}
+						if (thisA.text()!="All"){
+							if (in_array("All",time)){
+								time.splice(time.indexOf("All"),1);
+								$("#timeAll")
+									.removeClass(settings.classActive);
+							}
+						}
 						
-						if (in_array(thisA.text(),time)){
+						if (!in_array(thisA.text(),time)){
 							thisLi.toggleClass(settings.classActive);
-							time.splice(time.indexOf(thisA.text()),1);
-						} else {
 							time.push(thisA.text());
+						} else {
+							time.splice(time.indexOf(thisA.text()),1);
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					
 					if (thisA.attr("class")=="result"){
+						if (thisA.text()=="All"){
+								thisLi.siblings()
+									.removeClass(settings.classActive);
+							}
+						if (thisA.text()!="All"){
+							if (in_array("All",resu)){
+								resu.splice(resu.indexOf("All"),1);
+								$("#resultAll")
+									.removeClass(settings.classActive);
+							}
+						}
 						
-						if (in_array(thisA.text(),resu)){
+						if (!in_array(thisA.text(),resu)){
 							thisLi.toggleClass(settings.classActive);
-							resu.splice(resu.indexOf(thisA.text()),1);
-						} else {
 							resu.push(thisA.text());
+							
+						} else {
+							resu.splice(resu.indexOf(thisA.text()),1);
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					if (in_array(thisA.attr("class"),["result","time","offenseCrime","offense"])){
-						mapping(offe,inci,time,resu);
+						console.log(offe);
+						console.log(inci);
+						mapping(findmap(),offe,inci,time,resu);
 					}
+					
                     _leftNavigationClick(thisParentUl, thisLi, event);
 
                 } catch (errorMessage) {
