@@ -23,7 +23,7 @@ function incidentNavi(){
 							.text("Incident Type")
 							.append(function (){
 								return $("<i></i>")
-										.attr("class","fa fa-balance-scale leftNavIcon");
+										.attr("class","fa fa fa-fire leftNavIcon");
 							});
 				})
 				.append(otypeul);
@@ -97,7 +97,7 @@ function timeNavi(){
 							.text("Time")
 							.append(function (){
 								return $("<i></i>")
-										.attr("class","fa fa-balance-scale leftNavIcon");
+										.attr("class","fa fa-calendar-check-o leftNavIcon");
 							});
 				})
 				.append(otypeul);
@@ -133,7 +133,7 @@ function resultNavi(){
 							.text("Result")
 							.append(function (){
 								return $("<i></i>")
-										.attr("class","fa fa-balance-scale leftNavIcon");
+										.attr("class","fa fa-level-down leftNavIcon");
 							});
 				})
 				.append(otypeul);
