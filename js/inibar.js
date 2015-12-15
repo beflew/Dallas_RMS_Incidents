@@ -1,9 +1,13 @@
 function newNavi(){
 	$(document).ready(function(){
+		
+						
 		offenseNavi();
 		incidentNavi();
 		timeNavi();
 		resultNavi();
+		$(".All")
+			.toggleClass("active");
 
 	});
 }
@@ -27,7 +31,8 @@ function incidentNavi(){
 		offenseIncidentType.forEach(function (d){
 			
 			var li=$("<li></li>")
-				.attr("class","offenseCrime")
+				.attr("class","offenseCrime "+d)
+				.attr("id","offenseCrime"+d)
 				.append(function (){
 					return $("<a></a>")
 							.text(d)
@@ -46,7 +51,7 @@ function incidentNavi(){
 }
 
 function offenseNavi(){
-	var offenseType=["Offense","No Offense"]
+	var offenseType=returnoffense();
 		var otype=$("<li></li>");
 		var otypeul=$("<ul></ul>")
 				.attr("id","offenseTypeul");
@@ -64,7 +69,8 @@ function offenseNavi(){
 		offenseType.forEach(function (d){
 			
 			var li=$("<li></li>")
-				.attr("class","offense")
+				.attr("class","offense "+d)
+				.attr("id","offense"+d)
 				.append(function (){
 					return $("<a></a>")
 							.text(d)
@@ -99,7 +105,8 @@ function timeNavi(){
 		time.forEach(function (d){
 			
 			var li=$("<li></li>")
-				.attr("class","time")
+				.attr("class","time "+d)
+				.attr("id","time"+d)
 				.append(function (){
 					return $("<a></a>")
 							.text(d)
@@ -134,7 +141,8 @@ function resultNavi(){
 		result.forEach(function (d){
 			
 			var li=$("<li></li>")
-				.attr("class","result")
+				.attr("class","result "+d)
+				.attr("id","result"+d)
 				.append(function (){
 					return $("<a></a>")
 							.text(d)
@@ -153,18 +161,18 @@ function resultNavi(){
 
 
 function returncrime(){
-	return ["Violation","Property","Traffic","Prostitution","Liquor&Drugs","Property Found","Accident","Others"]
+	return ["Violation","Property","Traffic","Prostitution","Liquor&Drugs","Property Found","Accident","Others","All"]
 }
 
 function returnoffense(){
-	return ["Offense","No Offense"];
+	return ["Offense","No Offense","All"];
 	
 }
 
 function returntime(){
-	return ["midnight","before dawn","morning","noon","afternoon","evening","night"];
+	return ["midnight","before dawn","morning","noon","afternoon","evening","night","All"];
 }
 
 function returnresult(){
-	return ["Clear by Arrest","Clear by Exceptional Arrest","Closed/Cleared","Open","Returned for Correction","Suspended"];
+	return ["Clear by Arrest","Clear by Exceptional Arrest","Closed/Cleared","Open","Returned for Correction","Suspended","All"];
 }

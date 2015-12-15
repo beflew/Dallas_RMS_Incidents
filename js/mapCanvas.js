@@ -3,10 +3,23 @@ function mapping(offense,incidents,time,result) {
 	var map = new L.Map("map", {center: [32.740, -96.889], zoom: 12})
 		.addLayer(new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"));
 	
-	
+	var toLine = d3.svg.line()
+			.interpolate("linear")
+			.x(function(d) {
+				return applyLatLngToLayer(d).x
+			})
+			.y(function(d) {
+				return applyLatLngToLayer(d).y
+			});
+
+	function applyLatLngToLayer(d) {
+			var y = d.lat
+			var x = d.lon
+			return map.latLngToContainerPoint(new L.LatLng(y, x))
+		}
     L.canvasOverlay()
 		.drawing(drawingOnCanvas)
-		.addTo(leafletMap);
+		.addTo(map);
 	
 	function drawingOnCanvas(canvasOverlay, params){
 		var ctx = params.canvas.getContext('2d');
@@ -16,16 +29,12 @@ function mapping(offense,incidents,time,result) {
 		var detachedContainer = document.createElement("custom");
 		var dataContainer = d3.select(detachedContainer);
 		
-		console.log(offense);
-		console.log(time);
-		console.log(incidents);
-		console.log(result);
 		var data=[]
 		
 		
 		d3.json("data/streetlevelbigroads.json", function(error, collection) {
 			if (error) throw error;
-			data=$.extend(collection,data);
+			
 			collection.forEach(function (d){
 				d.path.forEach(function (t){
 					count=0;
@@ -40,42 +49,22 @@ function mapping(offense,incidents,time,result) {
 			});
 			
 		
-		var transform = d3.geo.transform({
-			point: projectPoint
-		});
-		var d3path = d3.geo.path().projection(transform);
-
-		function projectPoint(lat, lon) {
-			var point = map.latLngToLayerPoint(new L.LatLng(lat, lon));
-			this.stream.point(point.x, point.y);
-		}
 		
-		var toLine = d3.svg.line()
-			.interpolate("linear")
-			.x(function(d) {
-				return applyLatLngToLayer(d).x
-			})
-			.y(function(d) {
-				return applyLatLngToLayer(d).y
-			});
-
-		function applyLatLngToLayer(d) {
-			var y = d.lat
-			var x = d.lon
-			return map.latLngToLayerPoint(new L.LatLng(y, x))
-		}
+		
+		
 		draw();
 		map.on("viewreset", reset);
 		reset();
-		drawCanvas();
 		function reset() {
-			for (var i=0;i<collection.length;i++){
-				var ss=d3.selectAll(".path"+i)
-						.attr("d",function (d){return toLine(d.points)});
-						
-			}
+		for (var i=0;i<collection.length;i++){
+			var ss=dataContainer.selectAll(".path"+i)
+					
 			
+					
 		}
+		
+	}
+		drawCanvas();
 		
 
 		function draw(){
@@ -94,23 +83,6 @@ function mapping(offense,incidents,time,result) {
 					} else {
 						return "road";
 					}
-				})
-				.on("mouseover",function (d){
-					if (d.name!=""){
-						
-						var reg=new RegExp(" ","g");
-						var nameclass="."+d.name.replace(reg,"_");
-						d3.selectAll(nameclass)
-							.style("stroke-width",5)
-					}
-				})
-				.on("mouseout",function (d){
-					if (d.name!=""){
-						var reg=new RegExp(" ","g");
-						var nameclass="."+d.name.replace(reg,"_");
-						d3.selectAll(nameclass)
-							.style("stroke-width",2)
-					}
 				});
 
 			paths=[]
@@ -127,15 +99,8 @@ function mapping(offense,incidents,time,result) {
 						var nameclass=collection[i].name.replace(reg,"_");
 						return nameclass+" path path"+i;
 					})
-					.style("fill","none")
-					.style("stroke",function (d){
-						if (d.count>20) {
-							return "red";}
-						if (d.count>3){
-							return "yellow";}
-						return "green";
-					})
-					.style("stroke-width",2);
+					.attr("d",function (d){return toLine(d.points)});
+					
 				for (var j=0;j<tt[0].length;j++){
 					path.push(tt[0][j])
 				}
@@ -143,18 +108,29 @@ function mapping(offense,incidents,time,result) {
 			paths.push(path);
 			
 		}
-		function drawCanvas()
-			var elements = dataContainer.selectAll(".path");
-			elements.each(function(d) {
+		function drawCanvas(){
+			var fakeelements = dataContainer.selectAll(".path");
+			fakeelements.each(function(d) {
 				var node = d3.select(this);
+				styleS=node.attr("style");
 
 				ctx.beginPath();
 				ctx.lineWidth = 2;
-				var p = new Path2D(node.attr("d")
+				if (d.count>20){
+					color="red";
+				} else if (d.count>3){
+					color="yellow";
+				} else {
+					color="green";
+				}
+				ctx.strokeStyle = color;
+				var p = new Path2D(node.attr("d"));
+				console.log();
 				ctx.stroke(p);
 				ctx.closePath();
 
 		  });
+		}
 		});
 	}
 }

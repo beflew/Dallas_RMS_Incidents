@@ -36,6 +36,8 @@ h1 {
 }
 
 #leftNavigation {
+  position: relative;
+  top: 100;
   margin: 2rem 0;
 }
 #leftNavigation, #leftNavigation li ul {
@@ -43,7 +45,7 @@ h1 {
   padding: 0;
 }
 #leftNavigation li a {
-  font-size: 0.875rem;
+  font-size: 1.5rem;
   display: block;
   padding: 0.8rem 1rem 0.8rem 3rem;
   color: #adadad;
@@ -71,11 +73,11 @@ h1 {
 #leftNavigation li ul {
   display: none;
   margin: 0;
-  background-color: #75c0f2;
+  background-color: #17232f;
 }
 #leftNavigation li ul li a {
   border-bottom: solid 1px #233547;
-  color: black;
+  color: #adadad;
 }
 #leftNavigation li ul li:last-child a {
   border-bottom: none;
@@ -94,5 +96,5 @@ h1 {
 }
 
 #leftNavigation li ul li.active{
-  background-color: #17232f;
+  background-color: #75c0f2;
 }
