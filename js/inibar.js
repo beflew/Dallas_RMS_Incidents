@@ -161,7 +161,7 @@ function resultNavi(){
 
 
 function returncrime(){
-	return ["Violation","Property","Traffic","Prostitution","Liquor&Drugs","Property Found","Accident","Others","All"]
+	return ["Violent Crime","Property Crime","Traffic Accident","Prostitution","Liquor&Drugs","Property Found","Accident","Others","All"]
 }
 
 function returnoffense(){

@@ -23,10 +23,7 @@ function mapping(map,offense,incidents,time,result) {
 	reset();
 	function reset() {
 		
-		console.log(offense);
-		console.log(incidents);
-		console.log(time);
-		console.log(result);
+		
 		
 		g.selectAll(".road")
 		.remove();
