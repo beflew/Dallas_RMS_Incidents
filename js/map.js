@@ -162,7 +162,7 @@ function mapping(map,offense,incidents,time,result) {
 	}
 	
 
-	
+	return this;
 	}
 	
 	
