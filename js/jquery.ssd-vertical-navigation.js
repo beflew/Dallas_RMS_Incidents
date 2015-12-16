@@ -4,9 +4,8 @@
 	offe=["All"];
 	time=["All"];
 	resu=["All"];
-	$(document).ready(function(){
-		mapping(map,returnoffense(),returncrime(),returntime(),returnresult());
-	});
+	
+	
 	
 	
     $.fn.ssdVerticalNavigation = function(options) {
@@ -86,13 +85,16 @@
 								
 						} else {
 							offe.splice(offe.indexOf(thisA.text()),1);
+							if (thisA.text()=="All"){
+								offe=[]
+							}
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					
 					if (thisA.attr("class")=="offenseCrime"){
 						if (thisA.text()=="All"){
-								inci=[]
+								
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -110,13 +112,16 @@
 							
 						} else {
 							inci.splice(inci.indexOf(thisA.text()),1);
+							if (thisA.text()=="All"){
+								inci=[]
+							}
 							thisLi.removeClass(settings.classActive);
 						}
 					}
 					
 					if (thisA.attr("class")=="time"){
 						if (thisA.text()=="All"){
-								time=[];
+								
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -132,7 +137,11 @@
 							thisLi.toggleClass(settings.classActive);
 							time.push(thisA.text());
 						} else {
+							
 							time.splice(time.indexOf(thisA.text()),1);
+							if (thisA.text()=="All"){
+								time=[]
+							}
 							thisLi.removeClass(settings.classActive);
 						}
 					}
@@ -157,6 +166,9 @@
 							
 						} else {
 							resu.splice(resu.indexOf(thisA.text()),1);
+							if (thisA.text()=="All"){
+								resu=[]
+							}
 							thisLi.removeClass(settings.classActive);
 						}
 					}
