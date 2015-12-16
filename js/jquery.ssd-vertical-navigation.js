@@ -113,7 +113,7 @@
 						} else {
 							inci.splice(inci.indexOf(thisA.text()),1);
 							if (thisA.text()=="All"){
-								inci=[]
+								inci=[];
 							}
 							thisLi.removeClass(settings.classActive);
 						}
@@ -140,7 +140,7 @@
 							
 							time.splice(time.indexOf(thisA.text()),1);
 							if (thisA.text()=="All"){
-								time=[]
+								time=[];
 							}
 							thisLi.removeClass(settings.classActive);
 						}
@@ -148,7 +148,7 @@
 					
 					if (thisA.attr("class")=="result"){
 						if (thisA.text()=="All"){
-								resu=[];
+								
 								thisLi.siblings()
 									.removeClass(settings.classActive);
 							}
@@ -166,8 +166,10 @@
 							
 						} else {
 							resu.splice(resu.indexOf(thisA.text()),1);
+							console.log(thisA.text());
 							if (thisA.text()=="All"){
-								resu=[]
+								resu=[];
+								
 							}
 							thisLi.removeClass(settings.classActive);
 						}
